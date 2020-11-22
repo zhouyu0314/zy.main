@@ -4,11 +4,9 @@ import com.common.dto.Dto;
 import com.common.dto.DtoUtil;
 import com.fileManager.service.FileManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,15 +17,23 @@ public class FileManagerController {
     @Autowired
     private FileManagerService fileManagerService;
 
-    @GetMapping("/showAllFile")
-    public Dto showAllFile(){
-        List<Map<String, Object>> files = fileManagerService.showAllFile();
+    /**
+     * 显示所有文件
+     * @return
+     */
+    @PostMapping("/showAllFile")
+    public Dto showAllFile(@RequestBody HashMap param){
+        List<Map<String, Object>> files = fileManagerService.showAllFile(param);
         return DtoUtil.returnDataSuccess(files);
     }
 
-    @GetMapping("/showCapacity")
-    public Dto showCapacity(){
-        Map<String, Object> capacity = fileManagerService.showCapacity();
+    /**
+     *
+     * @return
+     */
+    @PostMapping("/showCapacity")
+    public Dto showCapacity(@RequestBody HashMap param){
+        Map<String, Object> capacity = fileManagerService.showCapacity(param);
         return DtoUtil.returnDataSuccess(capacity);
     }
 }

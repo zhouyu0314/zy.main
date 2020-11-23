@@ -28,12 +28,19 @@ public class FileManagerController {
     }
 
     /**
-     *
+     * 显示系统容量信息
      * @return
      */
     @PostMapping("/showCapacity")
     public Dto showCapacity(@RequestBody HashMap param){
         Map<String, Object> capacity = fileManagerService.showCapacity(param);
         return DtoUtil.returnDataSuccess(capacity);
+    }
+
+    @PostMapping("/showFileInfo")
+    public Dto showFileInfo(@RequestBody HashMap param){
+        Map<String, Object> fileInfo = fileManagerService.showFileInfo(param);
+        return DtoUtil.returnDataSuccess(fileInfo);
+
     }
 }

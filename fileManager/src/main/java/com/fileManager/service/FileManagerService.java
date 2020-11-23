@@ -14,4 +14,11 @@ public interface FileManagerService {
      * 获取容量信息
      */
     Map<String,Object> showCapacity(HashMap param);
+
+    /**
+     * 显示文件属性
+     * @param param
+     * @return
+     */
+    Map<String,Object> showFileInfo(HashMap param);
 }

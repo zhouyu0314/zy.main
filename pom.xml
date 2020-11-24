@@ -13,6 +13,8 @@
         <module>eureka</module>
         <module>fileManager</module>
         <module>fileManager.api</module>
+        <module>communication</module>
+        <module>communication.api</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

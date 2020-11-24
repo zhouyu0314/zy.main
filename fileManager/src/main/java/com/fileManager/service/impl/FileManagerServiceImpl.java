@@ -1,7 +1,10 @@
 package com.fileManager.service.impl;
 
+import com.fileManager.async.FileManagerAsync;
 import com.fileManager.service.FileManagerService;
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -25,67 +28,69 @@ import java.util.concurrent.TimeUnit;
 public class FileManagerServiceImpl implements FileManagerService {
     private static Map<String, String> typeList = new HashMap<>();
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    @Autowired
+    private FileManagerAsync fileManagerAsync;
 
     static {
         //图片类型格式为2
-        typeList.put("jpg", "2");
-        typeList.put("jpeg", "2");
-        typeList.put("png", "2");
-        typeList.put("gif", "2");
-        typeList.put("tif", "2");
-        typeList.put("bmp", "2");
+        typeList.put("jpg", "img");
+        typeList.put("jpeg",  "img");
+        typeList.put("png",  "img");
+        typeList.put("gif",  "img");
+        typeList.put("tif",  "img");
+        typeList.put("bmp",  "img");
         //网页文件格式为3
-        typeList.put("html", "3");
+        typeList.put("html", "html");
         //压缩文件格式为4
-        typeList.put("zip", "4");
-        typeList.put("rar", "4");
-        typeList.put("gz", "4");
-        typeList.put("rpm", "4");
-        typeList.put("iso", "4");
-        typeList.put("deb", "4");
-        typeList.put("7z", "4");
+        typeList.put("zip", "rar");
+        typeList.put("rar", "rar");
+        typeList.put("gz", "rar");
+        typeList.put("rpm", "rar");
+        typeList.put("iso", "rar");
+        typeList.put("deb", "rar");
+        typeList.put("7z", "rar");
         //文档格式
-        typeList.put("txt", "5");
-        typeList.put("sql", "5");
-        //office
-        typeList.put("wps", "6");
-        typeList.put("doc", "6");
-        typeList.put("docx", "6");
+        typeList.put("txt", "txt");
+        typeList.put("sql", "txt");
+        //word
+        typeList.put("wps", "doc");
+        typeList.put("doc", "doc");
+        typeList.put("docx", "doc");
         //xls
-        typeList.put("xls", "7");
-        typeList.put("et", "7");
-        typeList.put("ett", "7");
-        typeList.put("xlsx", "7");
+        typeList.put("xls", "xls");
+        typeList.put("et", "xls");
+        typeList.put("ett", "xls");
+        typeList.put("xlsx", "xls");
         //ppt
-        typeList.put("ppt", "8");
-        typeList.put("ppts", "8");
-        typeList.put("dps", "8");
-        typeList.put("dpt", "8");
+        typeList.put("ppt", "ppt");
+        typeList.put("ppts", "ppt");
+        typeList.put("dps", "ppt");
+        typeList.put("dpt", "ppt");
         //music
-        typeList.put("MPEG", "9");
-        typeList.put("MP3", "9");
-        typeList.put("MPEG-4", "9");
-        typeList.put("MIDI", "9");
-        typeList.put("WMA", "9");
-        typeList.put("APE", "9");
-        typeList.put("FLAC", "9");
+        typeList.put("MPEG", "music");
+        typeList.put("MP3", "music");
+        typeList.put("MPEG-4", "music");
+        typeList.put("MIDI", "music");
+        typeList.put("WMA", "music");
+        typeList.put("APE", "music");
+        typeList.put("FLAC", "music");
         //movie
-        typeList.put("AVI", "10");
-        typeList.put("mov", "10");
-        typeList.put("rmvb", "10");
-        typeList.put("rm", "10");
-        typeList.put("FLV", "10");
-        typeList.put("mp4", "10");
-        typeList.put("3GP", "10");
+        typeList.put("AVI", "movie");
+        typeList.put("mov", "movie");
+        typeList.put("rmvb", "movie");
+        typeList.put("rm", "movie");
+        typeList.put("FLV", "movie");
+        typeList.put("mp4", "movie");
+        typeList.put("3GP", "movie");
         //执行文件
-        typeList.put("exe", "11");
-        typeList.put("msi", "11");
+        typeList.put("exe", "exe");
+        typeList.put("msi", "exe");
         //js
-        typeList.put("js", "12");
+        typeList.put("js", "js");
         //vue
-        typeList.put("vue", "13");
+        typeList.put("vue", "vue");
         //java
-        typeList.put("java", "14");
+        typeList.put("java", "java");
     }
 
     @Override
@@ -99,7 +104,7 @@ public class FileManagerServiceImpl implements FileManagerService {
             params.put("name", name);
             params.put("path", file.getAbsolutePath());
             if (file.isDirectory()) {
-                params.put("isDirectory", 1);
+                params.put("isDirectory", "directory");
                 //params.put("size",null);
             } else if (file.isFile()) {
                 //需要判断是什么类型的文件
@@ -107,7 +112,7 @@ public class FileManagerServiceImpl implements FileManagerService {
                 if (typeList.get(type) != null) {
                     params.put("isDirectory", typeList.get(type));
                 } else {
-                    params.put("isDirectory", 100);
+                    params.put("isDirectory", "blank");
                 }
                 //暂时不获取文件大小，如果太大会超时
                 //params.put("size", FileUtils.sizeOf(file));
@@ -135,17 +140,37 @@ public class FileManagerServiceImpl implements FileManagerService {
 
     @Override
     public Map<String, Object> showFileInfo(HashMap param) {
-        File file = new File(param.get("path").toString());
-        Map<String, Object> params = new HashMap<>();
-        params.put("size", FileUtils.sizeOf(file));
-        params.put("modifiedTime", sdf.format(file.lastModified()));
+        Map<String, Object> params = null;
         try {
+            File file = new File(param.get("path").toString());
+            params = new HashMap<>();
+            //调用异步方法
+            fileManagerAsync.getSize(file);
+            params.put("mtime", sdf.format(file.lastModified()));
             Path path= Paths.get(param.get("path").toString());
             BasicFileAttributes attr= Files.getFileAttributeView(path, BasicFileAttributeView.class, LinkOption.NOFOLLOW_LINKS ).readAttributes();
-            params.put("createdTime",sdf.format( attr.creationTime().toMillis()));
+            params.put("ctime",sdf.format(attr.creationTime().toMillis()));
+            //需要判断是什么类型的文件
+
+            String name = file.getName();
+            String type = name.substring(name.lastIndexOf(".") + 1);
+            params.put("name",name);
+            if (!file.isDirectory()) {
+                if (typeList.get(type)!=null) {
+                    params.put("type",typeList.get(type));
+                }else{
+                    params.put("type","unknow");
+                }
+            }else{
+                params.put("type","directory");
+            }
         }catch (Exception e){
 
         }
         return params;
     }
+
+
+
+
 }

@@ -12,6 +12,11 @@
     <artifactId>communication.api</artifactId>
 
     <dependencies>
+        <!--springcloud整合的openFeign-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
         <dependency>
             <artifactId>common.api</artifactId>
             <groupId>cm.zy</groupId>

@@ -2,6 +2,7 @@ package com.fileManager.controller;
 
 import com.common.dto.Dto;
 import com.common.dto.DtoUtil;
+import com.communication.feign.CommunicationFeignClient;
 import com.fileManager.service.FileManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,9 @@ public class FileManagerController {
     @Autowired
     private FileManagerService fileManagerService;
 
+    @Autowired(required = false)
+    private CommunicationFeignClient communicationFeignClient;
+
     /**
      * 显示所有文件
      * @return
@@ -24,6 +28,7 @@ public class FileManagerController {
     @PostMapping("/showAllFile")
     public Dto showAllFile(@RequestBody HashMap param){
         List<Map<String, Object>> files = fileManagerService.showAllFile(param);
+        communicationFeignClient.tets("asd");
         return DtoUtil.returnDataSuccess(files);
     }
 

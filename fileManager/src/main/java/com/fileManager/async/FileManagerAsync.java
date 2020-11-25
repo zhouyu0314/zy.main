@@ -1,18 +1,24 @@
 package com.fileManager.async;
 
-import org.apache.commons.io.FileUtils;
+import com.communication.feign.CommunicationFeignClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
+import java.util.HashMap;
 
 @Component
 public class FileManagerAsync {
+    @Autowired(required = false)
+    private CommunicationFeignClient communicationFeignClient;
 
     @Async
-    public Long getSize(File file){
-        long size = FileUtils.sizeOf(file);
-        return null;
+    public void getSize(HashMap param){
+
+        communicationFeignClient.getFileSize(param);
+
     }
+
+
 
 }

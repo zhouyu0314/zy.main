@@ -2,27 +2,22 @@ package com.fileManager.service.impl;
 
 import com.fileManager.async.FileManagerAsync;
 import com.fileManager.service.FileManagerService;
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.nio.file.attribute.FileTime;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 @Service
 public class FileManagerServiceImpl implements FileManagerService {
@@ -30,6 +25,7 @@ public class FileManagerServiceImpl implements FileManagerService {
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     @Autowired
     private FileManagerAsync fileManagerAsync;
+
 
     static {
         //图片类型格式为2
@@ -140,12 +136,17 @@ public class FileManagerServiceImpl implements FileManagerService {
 
     @Override
     public Map<String, Object> showFileInfo(HashMap param) {
+
         Map<String, Object> params = null;
         try {
             File file = new File(param.get("path").toString());
             params = new HashMap<>();
             //调用异步方法
-            fileManagerAsync.getSize(file);
+            String channelId = param.get("channelId").toString();
+            HashMap data = new HashMap();
+            data.put("file",file);
+            data.put("channelId",channelId);
+            fileManagerAsync.getSize(data);
             params.put("mtime", sdf.format(file.lastModified()));
             Path path= Paths.get(param.get("path").toString());
             BasicFileAttributes attr= Files.getFileAttributeView(path, BasicFileAttributeView.class, LinkOption.NOFOLLOW_LINKS ).readAttributes();

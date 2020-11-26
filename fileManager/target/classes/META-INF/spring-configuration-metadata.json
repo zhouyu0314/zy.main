@@ -2,15 +2,15 @@
   "groups": [
     {
       "name": "filemanager.file",
-      "type": "com.fileManager.config.FileConst",
-      "sourceType": "com.fileManager.config.FileConst"
+      "type": "com.zy.config.FileConst",
+      "sourceType": "com.zy.config.FileConst"
     }
   ],
   "properties": [
     {
       "name": "filemanager.file.path",
       "type": "java.lang.String",
-      "sourceType": "com.fileManager.config.FileConst"
+      "sourceType": "com.zy.config.FileConst"
     }
   ],
   "hints": []

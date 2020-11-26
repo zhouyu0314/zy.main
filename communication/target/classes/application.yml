@@ -3,7 +3,10 @@ server:
 
 spring:
   application:
-    name: communication
+    name: com.zy.communication
+ribbon:
+  ConnectTimeout: 300000
+  ReadTimeout: 300000
 
 #eureka地址
 eureka:

@@ -3,7 +3,11 @@ server:
 
 spring:
   application:
-    name: fileManager
+    name: com.zy.fileManager
+
+ribbon:
+  ConnectTimeout: 300000
+  ReadTimeout: 300000
 
 #eureka地址
 eureka:

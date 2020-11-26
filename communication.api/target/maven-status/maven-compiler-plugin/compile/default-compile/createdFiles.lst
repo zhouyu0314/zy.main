@@ -1,0 +1,6 @@
+com\zy\feignClient\CommunicationFeignClient.class
+com\zy\entity\ChatMsg.class
+com\zy\enums\MsgActionEnum.class
+com\zy\entity\DataContent.class
+com\zy\enums\MsgSignFlagEnum.class
+com\zy\entity\CommunicationEntity.class

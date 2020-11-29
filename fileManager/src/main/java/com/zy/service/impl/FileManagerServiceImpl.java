@@ -35,9 +35,6 @@ public class FileManagerServiceImpl implements FileManagerService {
     @Autowired
     private FileManagerAsync fileManagerAsync;
 
-    @Autowired(required = false)
-    private CommunicationFeignClient communicationFeignClient;
-
 
     static {
         //图片类型格式为2
@@ -187,11 +184,6 @@ public class FileManagerServiceImpl implements FileManagerService {
     }
 
 
-    @Override
-    public Dto showTest(HashMap param) {
-        Dto asd = communicationFeignClient.tets2(param);
-        return asd;
-    }
 
     @Override
     public void downLoad(String fileName, HttpServletRequest request, HttpServletResponse response) throws IOException {

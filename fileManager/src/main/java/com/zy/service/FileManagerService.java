@@ -30,5 +30,4 @@ public interface FileManagerService {
 
 
 
-    Dto showTest(HashMap param) throws Exception;
 }

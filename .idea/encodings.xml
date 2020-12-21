@@ -12,8 +12,9 @@
     <file url="file://$PROJECT_DIR$/eureka/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/fileManager" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/fileManager.api" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/fileManager.api" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/fileManager/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/systemCode" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/systemCode.api" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

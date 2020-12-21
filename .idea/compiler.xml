@@ -6,6 +6,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="systemCode" />
+        <module name="systemCode.api" />
         <module name="eureka" />
         <module name="common.api" />
         <module name="fileManager.api" />
@@ -23,6 +25,8 @@
       <module name="eureka" options="-parameters" />
       <module name="fileManager" options="-parameters" />
       <module name="fileManager.api" options="-parameters" />
+      <module name="systemCode" options="-parameters" />
+      <module name="systemCode.api" options="-parameters" />
       <module name="zy.main" options="-parameters" />
     </option>
   </component>

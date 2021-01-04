@@ -1,7 +1,5 @@
 package com.zy.service;
 
-import com.zy.dto.Dto;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
@@ -28,6 +26,10 @@ public interface FileManagerService {
 
     void downLoad(String fileName, HttpServletRequest request, HttpServletResponse response)throws Exception;
 
+    /**
+     * 获取文件（Base64）
+     */
+    String getFileOnline( HashMap param) throws Exception;
 
 
 }

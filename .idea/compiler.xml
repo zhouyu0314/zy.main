@@ -6,14 +6,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="systemCode" />
         <module name="systemCode.api" />
+        <module name="communication" />
         <module name="eureka" />
         <module name="common.api" />
         <module name="fileManager.api" />
         <module name="communication.api" />
         <module name="fileManager" />
-        <module name="communication" />
+        <module name="systemCode" />
       </profile>
     </annotationProcessing>
   </component>

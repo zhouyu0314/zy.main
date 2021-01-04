@@ -1,17 +1,25 @@
 package com.zy.controller;
 
+import com.zy.async.SystemCodeAsync;
 import com.zy.dto.Dto;
 import com.zy.dto.DtoUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Future;
+@EnableAsync
 @CrossOrigin
 @RestController
 @RequestMapping("/api/code")
 public class SystemCodeController {
+    @Autowired
+    private SystemCodeAsync systemCodeAsync;
+
     @CrossOrigin
     @PostMapping("/getSimpleForMain")
     public Dto getSimpleForMain(@RequestBody HashMap param) {
@@ -163,4 +171,15 @@ public class SystemCodeController {
         }
         return DtoUtil.returnDataSuccess(list);
     }
+
+
+    @PostMapping("/test")
+    public Dto TestAsync() throws Exception{
+        Future<String> stringFuture = systemCodeAsync.AsyncMethod();
+        System.out.println("方法继续执行不阻塞");
+        return DtoUtil.returnSuccess(stringFuture.get());
+    }
+
+
+
 }

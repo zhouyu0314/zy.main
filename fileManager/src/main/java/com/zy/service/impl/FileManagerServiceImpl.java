@@ -1,12 +1,12 @@
 package com.zy.service.impl;
 
 import com.zy.async.FileManagerAsync;
-import com.zy.dto.Dto;
-import com.zy.feignClient.CommunicationFeignClient;
 import com.zy.service.FileManagerService;
+import com.zy.utils.FileUtil;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Base64Utils;
 import org.springframework.util.FileCopyUtils;
 
 import javax.servlet.ServletOutputStream;
@@ -236,6 +236,22 @@ public class FileManagerServiceImpl implements FileManagerService {
             outputStream.close();
         }
 
+    }
+
+    @Override
+    public String getFileOnline(HashMap param) throws Exception {
+        String file = param.get("path").toString();
+        String directory = param.get("directory").toString();
+        if ("txt".equals(directory)) {//如果是文本类型,则不能超过10M 否则打不开 卡死
+            long fileSize = FileUtils.sizeOf(new File(file));
+            if (fileSize>1024*1024) {//如果文件
+                throw new Exception("文本文件太大,不可在线浏览,请下载!");
+            }
+        }
+        Path path = Paths.get(file);
+        byte[] bytes = FileUtil.fileToBytesByNio(path);
+        String data = Base64Utils.encodeToString(bytes);
+        return data;
     }
 
 

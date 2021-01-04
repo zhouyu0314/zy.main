@@ -3,21 +3,11 @@ package com.zy.controller;
 import com.zy.dto.Dto;
 import com.zy.dto.DtoUtil;
 import com.zy.service.FileManagerService;
-import com.zy.utils.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
-import java.nio.channels.Channels;
-import java.nio.channels.FileChannel;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,13 +54,39 @@ public class FileManagerController {
 
 
     @PostMapping("/showFileInfo")
-    public Dto showFileInfo(@RequestBody HashMap param) throws IOException {
-        Path path = Paths.get("D:/资料大全1.1.2.doc");
-        byte[] bytes = FileUtil.fileToBytesByNio(path);
-        String data = Base64Utils.encodeToString(bytes);
-        return DtoUtil.returnSuccess(data);
+    public Dto showFileInfo(@RequestBody HashMap param) {
+        Map<String, Object> data = fileManagerService.showFileInfo(param);
+                return DtoUtil.returnDataSuccess(data);
+    }
+
+    @PostMapping("/getFileOnline")
+    public Dto getFileOnline(@RequestBody HashMap param) {
+        try {
+            String data = fileManagerService.getFileOnline(param);
+            return DtoUtil.returnDataSuccess(data);
+        } catch (Exception e) {
+            return DtoUtil.returnFail(e.getMessage(),"201");
+        }
+    }
+
+    @GetMapping("/textAxios/{num}")
+    public Dto textAxios(@PathVariable String num){
+        if ("1".equals(num)) {
+            return DtoUtil.returnSuccess("成功");
+        }else{
+            try {
+                throw new Exception("参数错误");
+            } catch (Exception e) {
+                return DtoUtil.returnFail(e.getMessage(),"0000");
+            }
+
+        }
     }
 
 
+    @PostMapping("/textAxiosPost")
+    public Dto textAxiosPost(@RequestBody HashMap params){
+        return DtoUtil.returnSuccess();
+    }
 
 }

@@ -1,42 +1,36 @@
 package com.zy.config;
 
+import com.mongodb.client.MongoCollection;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.bson.Document;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.ResourceBundle;
+import javax.print.Doc;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class MongoDBClient {
 
-    private  MongoClient mongoClient = null;
-    private  String dbname = null;
+    private MongoClient mongoClient;
+    @Value("${mongodb.url}")
+    private String MONGODB_URL;
 
-    public MongoDBClient() {
-//        try {
-//            ResourceBundle resourceBundle = ResourceBundle.getBundle("mongodb");
-//                String mongodbURL = resourceBundle.getString("mongodb.url");
-//                if (mongodbURL == null || "".equals(mongodbURL.trim())) {
-//                    mongoClient = new MongoClient();
-//                } else {
-                MongoClientURI clientURI = new MongoClientURI("mongodb://root:root@localhost:27017");
-                mongoClient = new MongoClient(clientURI);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+    public MongoCollection<Document> getMongoClient(String DBName,String collectionName) {
+        MongoClientURI clientURI = new MongoClientURI(MONGODB_URL);
+        mongoClient = new MongoClient(clientURI);
+        return mongoClient.getDatabase(DBName).getCollection(collectionName);
+
+
     }
 
-    public MongoClient getMongoClient() {
-        return mongoClient;
-    }
-
-    public String getDbname() {
-        return dbname;
-    }
-
-    public void close(){
+    public void close() {
         mongoClient.close();
     }
+
 }

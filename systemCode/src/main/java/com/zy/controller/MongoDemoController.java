@@ -1,20 +1,27 @@
 package com.zy.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.mongodb.Block;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoIterable;
+import com.sun.org.apache.bcel.internal.generic.NEWARRAY;
 import com.zy.config.MongoDBClient;
 import com.zy.dto.Dto;
 import com.zy.dto.DtoUtil;
 import com.zy.service.MongoDemoService;
-import feign.Param;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -28,17 +35,18 @@ public class MongoDemoController {
     private MongoDBClient mongoDBClient;
 
 
+
+
     @GetMapping("/showAll")
     public Dto showAll() {
-        MongoClient mongoClient = mongoDBClient.getMongoClient();
-        //MongoIterable<String> list = mongoClient.listDatabaseNames();
-
-        MongoCollection<Document> collection = mongoClient.getDatabase("zy").getCollection("zb");
-        collection.insertOne(new Document("name", "Deng").append("Gender", "Male").append("Tel", "18600000000"));
-
-        FindIterable<Document> documents = collection.find();
-        mongoClient.close();
-        return DtoUtil.returnDataSuccess(documents);
+        MongoCollection<Document> mongoClient = mongoDBClient.getMongoClient("zy", "zb");
+        FindIterable<Document> documents = mongoClient.find().limit(3);
+        List<Document> lists = new ArrayList<>();
+        for (Document document : documents) {
+            lists.add(document);
+        }
+        mongoDBClient.close();
+        return DtoUtil.returnDataSuccess(lists);
     }
 
     @GetMapping("/testEhcache/{param}")

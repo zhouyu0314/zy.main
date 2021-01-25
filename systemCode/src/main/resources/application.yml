@@ -4,6 +4,9 @@ server:
 spring:
   application:
     name: com.zy.systemCode
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/col
 
 #eureka地址
 eureka:
@@ -16,4 +19,6 @@ eureka:
     instance-id: ${spring.cloud.client.ip-address}:${server.port}
 
 mongodb:
-  url: mongodb://root:root@localhost:27017
+  url: mongodb://root:root@localhost:27017/zy
+
+
